@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#0a1417">
-    <meta name="description" content="কোরআন শরীফ পড়তে শিখুনুন - ইসলামিক লার্নিং অ্যাপ">
-    <title>ইসলামিক লার্নিং অ্যাপ</title>
+    <meta name="description" content="কোরআন শরীফ পড়তে শিখুনুন - QuranicRoots">
+    <title>QuranicRoots</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+Bengali:300,400,700&display=swap">
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -778,12 +778,12 @@
     /* Offline Support */
     .offline-message {
         position: fixed;
-        top: 10px;
+        top: 80px;
         left: 50%;
         transform: translateX(-50%);
         background: rgba(255, 59, 48, 0.9);
         color: white;
-        padding: 8px 15px;
+        padding: 18px 15px;
         border-radius: 20px;
         z-index: 100;
         font-size: 0.9rem;
@@ -794,8 +794,8 @@
 </head>
 <body>
     <div id="splash-screen">
-      <img src="https://i.postimg.cc/RZSDbCQK/holy-book-koran-with-rosary-hand-drawn-sketch-illustration-291138-9.png" width="50%">
-        <h1>ইসলামিক লার্নিং</h1>
+      <img src="logo.png" width="70%">
+        <h1>QuranicRoots</h1>
         <p>আপনার পবিত্র জ্ঞানের পথ</p>
         <div class="spinner"></div>
         <br><br>
@@ -804,12 +804,12 @@
 
     <div class="offline-message" id="offline-message">
 <i class="fas fa-exclamation-triangle"></i>
- আপনার ইন্টারনেট সংযোগ নেই। দয়া করে আপনার ইন্টারনেট সংযোগ করে আবার চেষ্টা করুন। <br> - ধন্যবাদ
+ আপনার ইন্টারনেট সংযোগ নেই। ইন্টরনেট সংযোগ করে আবার চেষ্টা করুন। <br> - ধন্যবাদ
     </div>
 
     <div id="app-content">
         <nav>
-            <a href="#">ইসলামিক লার্নিং</a>
+            <a href="#">Quranic Roots</a>
             <div class="nav-progress">
                 <span>অগ্রগতি:</span>
                 <div class="progress-circle">
@@ -826,9 +826,8 @@
         <section id="home-section" class="app-section active">
             <section class="hero-section">
                                   <img src="Quran.jpg" alt="কোরআন শরীফ পড়তে শিখুন" width="50%"> 
-                <h1>কোরআন শরীফ পড়তে শিখুন</h1>
-                <p>অল্প সময়ে 
-সহজ উপায়ে </p>
+                <h1>কুরআন পাঠের ফযীলত</h1>
+                <p>(১৪১৩) ইবনে মাসঊদ (রাঃ) কর্তৃক বর্ণিত, আল্লাহর রসূল সাল্লাল্লাহু আলাইহি ওয়াসাল্লাম বলেছেন, যে ব্যক্তি চায় যে, সে আল্লাহ ও তাঁর রসূলকে (অধিক) ভালবাসুক (অথবা আল্লাহ ও তাঁর রসূল তাকে ভালবাসুন), সে যেন কুরআন দেখে পাঠ করে। <br> (বাইহাক্বীর শুআবুল ঈমান ২২১৯, সিলসিলাহ সহীহাহ ২৩৪২)</p>
                 <a href="#playlists" class="btn" onclick="showSection('courses-section')">শুরু করুন</a>
             </section>
 
@@ -898,66 +897,26 @@
                     <span><span id="completed-count">০</span>/<span id="total-videos">১২</span> সম্পূর্ণ</span>
                 </div>
                 <div id="video-playlist">
-                    <div class="playlist-item active" data-lesson-id="1" onclick="changeVideo('https://www.youtube.com/embed/zmRGr-hW8tc?list=PLDPHd_U0ECxG3wMEgA--fdZpG9SJEGAQQ', this, 'ভূমিকা', 'কুরআনের মাধ্যমে আরবি শেখার সংক্ষিপ্ত বিবরণ।', '১৯:২৫')">
+                    <div class="playlist-item active" data-lesson-id="1" onclick="changeVideo('https://www.youtube.com/embed/8jGalaSh3oI?si=_kUP3-rUdMC2ASAe', this, 'পর্ব ১', 'কুরআনের মাধ্যমে আরবি শেখার সংক্ষিপ্ত বিবরণ।', '17:22')">
                         <span class="lesson-number">১</span>
-                        <span>ভূমিকা</span>
-                        <span>১৯:২৫</span>
-                    </div>
-                    <div class="playlist-item" data-lesson-id="2" onclick="changeVideo('https://www.youtube.com/embed/8fH6g2jYkFc?list=PLDPHd_U0ECxG3wMEgA--fdZpG9SJEGAQQ', this, 'পর্ব ১', 'মৌলিক আরবি অক্ষর ও শব্দ।', '৩৩:৪২')">
-                        <span class="lesson-number">২</span>
                         <span>পর্ব ১</span>
-                        <span>৩৩:৪২</span>
+                        <span>17:22</span>
                     </div>
-                    <div class="playlist-item" data-lesson-id="3" onclick="changeVideo('https://www.youtube.com/embed/JDPLhIpM97Q?list=PLDPHd_U0ECxG3wMEgA--fdZpG9SJEGAQQ', this, 'পর্ব ২', 'সংক্ষিপ্ত স্বরবর্ণের পরিচিতি।', '৩১:৪৫')">
-                        <span class="lesson-number">৩</span>
+                    <div class="playlist-item" data-lesson-id="2" onclick="changeVideo('https://www.youtube.com/embed/B18InEOVnfw?si=oV7x7BzRpqH848-L', this, 'পর্ব ২', 'মৌলিক আরবি অক্ষর ও শব্দ।', '18:10')">
+                        <span class="lesson-number">২</span>
                         <span>পর্ব ২</span>
-                        <span>৩১:৪৫</span>
+                        <span>18:10</span>
                     </div>
-                    <div class="playlist-item" data-lesson-id="4" onclick="changeVideo('https://www.youtube.com/embed/zPqEqpM2k5Q?list=PLDPHd_U0ECxG3wMEgA--fdZpG9SJEGAQQ', this, 'পর্ব ৩', 'দীর্ঘ স্বরবর্ণ ও মৌলিক শব্দ।', '৩৪:১২')">
-                        <span class="lesson-number">৪</span>
+                    <div class="playlist-item" data-lesson-id="3" onclick="changeVideo('https://www.youtube.com/embed/guNUt-04GDw?si=le7Xn75TWMdOM-fx', this, 'পর্ব ৩', 'মৌলিক আরবি অক্ষর ও শব্দ।', '16:53')">
+                        <span class="lesson-number">৩</span>
                         <span>পর্ব ৩</span>
-                        <span>৩৪:১২</span>
+                        <span>16:53</span>
                     </div>
-                    <div class="playlist-item" data-lesson-id="5" onclick="changeVideo('https://www.youtube.com/embed/1s2zskqH8lc?list=PLDPHd_U0ECxG3wMEgA--fdZpG9SJEGAQQ', this, 'পর্ব ৪', 'সুকুন ও সরল বাক্য।', '৩২:৫০')">
-                        <span class="lesson-number">৫</span>
+                    <div class="playlist-item" data-lesson-id="4" onclick="changeVideo('https://www.youtube.com/embed/CpuhGbWz23M?si=i-lR-f6zZclaclVc', this, 'পর্ব ৪', 'মৌলিক আরবি অক্ষর ও শব্দ।', '13:52')">
+                        <span class="lesson-number">৪</span>
                         <span>পর্ব ৪</span>
-                        <span>৩২:৫০</span>
-                    </div>
-                    <div class="playlist-item" data-lesson-id="6" onclick="changeVideo('https://www.youtube.com/embed/2oFpvS4xW8g?list=PLDPHd_U0ECxG3wMEgA--fdZpG9SJEGAQQ', this, 'পর্ব ৫', 'শাদ্দা ও মৌলিক ব্যাকরণ।', '৩৫:২০')">
-                        <span class="lesson-number">৬</span>
-                        <span>পর্ব ৫</span>
-                        <span>৩৫:২০</span>
-                    </div>
-                    <div class="playlist-item" data-lesson-id="7" onclick="changeVideo('https://www.youtube.com/embed/Ub2hVgoe18g?list=PLDPHd_U0ECxG3wMEgA--fdZpG9SJEGAQQ', this, 'পর্ব ৬', 'তানউইন ও বাক্য গঠন।', '৩৬:১৫')">
-                        <span class="lesson-number">৭</span>
-                        <span>পর্ব ৬</span>
-                        <span>৩৬:১৫</span>
-                    </div>
-                    <div class="playlist-item" data-lesson-id="8" onclick="changeVideo('https://www.youtube.com/embed/5kH7pXzW8s8?list=PLDPHd_U0ECxG3wMEgA--fdZpG9SJEGAQQ', this, 'পর্ব ৭', 'সর্বনাম ও কুরআনের উদাহরণ।', '৩৪:৪০')">
-                        <span class="lesson-number">৮</span>
-                        <span>পর্ব ৭</span>
-                        <span>৩৪:৪০</span>
-                    </div>
-                    <div class="playlist-item" data-lesson-id="9" onclick="changeVideo('https://www.youtube.com/embed/0r5o4o4z8g4?list=PLDPHd_U0ECxG3wMEgA--fdZpG9SJEGAQQ', this, 'পর্ব ৮', 'ক্রিয়া ও ক্রিয়া রূপান্তর।', '৩৩:৫৫')">
-                        <span class="lesson-number">৯</span>
-                        <span>পর্ব ৮</span>
-                        <span>৩৩:৫৫</span>
-                    </div>
-                    <div class="playlist-item" data-lesson-id="10" onclick="changeVideo('https://www.youtube.com/embed/dQw4w9WgXcQ?list=PLDPHd_U0ECxG3wMEgA--fdZpG9SJEGAQQ', this, 'পর্ব ৯', 'বিশেষ্য ও বিশেষণ।', '৩২:৩০')">
-                        <span class="lesson-number">১০</span>
-                        <span>পর্ব ৯</span>
-                        <span>৩২:৩০</span>
-                    </div>
-                    <div class="playlist-item" data-lesson-id="11" onclick="changeVideo('https://www.youtube.com/embed/dQw4w9WgXcQ?list=PLDPHd_U0ECxG3wMEgA--fdZpG9SJEGAQQ', this, 'পর্ব ১০', 'প্রিপজিশন ও কুরআনের বাক্যাংশ।', '৩৫:১০')">
-                        <span class="lesson-number">১১</span>
-                        <span>পর্ব ১০</span>
-                        <span>৩৫:১০</span>
-                    </div>
-                    <div class="playlist-item" data-lesson-id="12" onclick="changeVideo('https://www.youtube.com/embed/7y8u9i0o1p2?list=PLDPHd_U0ECxG3wMEgA--fdZpG9SJEGAQQ', this, 'সমাপ্তি', 'পর্যালোচনা ও পরবর্তী পদক্ষেপ।', '২০:৪৫')">
-                        <span class="lesson-number">১২</span>
-                        <span>সমাপ্তি</span>
-                        <span>২০:৪৫</span>
-                    </div>
+                        <span>13:52</span>
+                    </div>                    
                 </div>
             </div>
         </section>
@@ -1008,6 +967,19 @@
     </div>
 
     <script>
+      
+
+// Register the Service Worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/service-worker.js')
+    .then((registration) => {
+      console.log('Service Worker registered with scope:', registration.scope);
+    })
+    .catch((error) => {
+      console.log('Service Worker registration failed:', error);
+    });
+}
+
         const COMPLETED_VIDEOS_KEY = 'islamicLearningApp_completedVideos';
         const WATCH_HISTORY_KEY = 'islamicLearningApp_watchHistory';
         const LAST_PLAYED_KEY = 'islamicLearningApp_lastPlayed';
@@ -1410,7 +1382,7 @@
             });
             const hours = Math.floor(totalMinutes / 60);
             const minutes = Math.round(totalMinutes % 60);
-            return `${hours}ঘ ${minutes}মি`;
+            return `${hours} ঘন্টা  ${minutes} মিনিট `;
         }
 
         // Load course (scroll to playlist)
