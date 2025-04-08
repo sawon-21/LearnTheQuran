@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0a1417">
+    <meta name="description" content="কোরআন শরীফ পড়তে শিখুনুন - ইসলামিক লার্নিং অ্যাপ">
+    <title>ইসলামিক লার্নিং অ্যাপ</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+Bengali:300,400,700&display=swap">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+    @import url('https://fonts.maateen.me/apona-lohit/font.css');
+    :root {
+        --gold: #d4af37;
+        --gold-light: #e6c200;
+        --dark-bg: #0a1417;
+        --dark-secondary: #1c2526;
+        --text-light: #e0e0e0;
+        --text-muted: #b0b0b0;
+    }
+    
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+        font-family: 'Scheherazade', serif;
+        background: linear-gradient(135deg, var(--dark-secondary) 0%, var(--dark-bg) 100%);
+        color: var(--text-light);
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+
+    /* Splash Screen */
+    #splash-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: var(--dark-bg);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        transition: opacity 0.8s ease;
+    }
+
+    #splash-screen h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        color: var(--gold);
+        text-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
+        animation: glow 2s ease-in-out infinite alternate;
+        text-align: center;
+    }
+
+    #splash-screen p {
+        font-size: 1.3rem;
+        color: var(--text-muted);
+        letter-spacing: 1px;
+        margin-top: 15px;
+    }
+
+    .spinner {
+        border: 2px solid rgba(212, 175, 55, 0.2);
+        border-top: 2px solid var(--gold);
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 1.2s linear infinite;
+        margin-top: 25px;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    @keyframes glow {
+        from { text-shadow: 0 0 15px rgba(212, 175, 55, 0.3); }
+        to { text-shadow: 0 0 30px rgba(212, 175, 55, 0.5); }
+    }
+
+    /* Main App Content */
+    #app-content {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 50px 20px;
+        opacity: 0;
+        transition: opacity 0.8s ease;
+    }
+
+    #app-content.visible {
+        opacity: 1;
+    }
+
+    /* Navigation */
+    nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: rgba(10, 20, 23, 0.95);
+        backdrop-filter: blur(12px);
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 10;
+        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+        border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+    }
+
+    nav a {
+        color: var(--gold);
+        font-size: 1.5rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: color 0.3s ease;
+        text-decoration: none;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 60%;
+    }
+
+    .nav-progress {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-size: 1rem;
+    }
+
+    .progress-circle {
+        width: 50px;
+        height: 50px;
+        position: relative;
+    }
+
+    .progress-circle svg {
+        width: 100%;
+        height: 100%;
+        transform: rotate(-90deg);
+    }
+
+    .progress-circle .bg {
+        fill: none;
+        stroke: rgba(255, 255, 255, 0.05);
+        stroke-width: 6;
+    }
+
+    .progress-circle .progress {
+        fill: none;
+        stroke: var(--gold);
+        stroke-width: 6;
+        stroke-linecap: round;
+        transition: stroke-dasharray 0.6s ease;
+        stroke-dasharray: 0 100;
+    }
+
+    .progress-circle span {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: var(--gold);
+        font-weight: 700;
+        font-size: 0.6rem;
+    }
+
+    /* App Sections */
+    .app-section {
+        display: none;
+    }
+
+    .app-section.active {
+        display: block;
+    }
+
+    /* Hero Section */
+    .hero-section {
+        background: linear-gradient(45deg, var(--dark-bg), var(--dark-secondary));
+        padding: 60px 20px;
+        border-radius: 20px;
+        text-align: center;
+        margin: 80px 0 30px 0;
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(212, 175, 55, 0.15);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+        animation: rotate 20s linear infinite;
+    }
+
+    .hero-section h1 {
+        font-size: 2.2rem;
+        color: var(--gold);
+        margin-bottom: 20px;
+        text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-section p {
+        font-size: 1.1rem;
+        color: var(--text-muted);
+        max-width: 700px;
+        margin: 0 auto 30px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 12px 30px;
+        background: linear-gradient(45deg, var(--gold), var(--gold-light));
+        color: var(--dark-bg);
+        border-radius: 50px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.4s ease;
+        box-shadow: 0 5px 20px rgba(212, 175, 55, 0.4);
+        position: relative;
+        z-index: 1;
+        text-decoration: none;
+        font-size: 0.9rem;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn:hover {
+        background: linear-gradient(45deg, var(--gold-light), var(--gold));
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(212, 175, 55, 0.6);
+    }
+
+    .btn-secondary {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--text-light);
+        border: 1px solid rgba(212, 175, 55, 0.2);
+        box-shadow: none;
+    }
+
+    .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Courses Section */
+    #courses h2 {
+        color: var(--gold);
+        font-size: 2rem;
+        text-align: center;
+        margin-bottom: 25px;
+        text-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+    }
+
+    .course-card {
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 20px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        cursor: pointer;
+        transition: all 0.4s ease;
+        border: 1px solid rgba(212, 175, 55, 0.1);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .course-card:hover {
+        background: rgba(255, 255, 255, 0.08);
+        transform: translateY(-8px);
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+        border-color: rgba(212, 175, 55, 0.2);
+    }
+
+    .course-card img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 15px;
+        border: 1px solid rgba(212, 175, 55, 0.2);
+        transition: transform 0.4s ease;
+    }
+.hero-section img{
+  width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 15px;
+        border: 1px solid rgba(212, 175, 55, 0.2);
+        transition: transform 0.4s ease;
+    }
+}
+    .course-info {
+        width: 100%;
+    }
+
+    .course-info h5 {
+        color: var(--gold);
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+        text-shadow: 0 0 5px rgba(212, 175, 55, 0.2);
+        text-align: center;
+    }
+
+    .course-info p {
+        color: var(--text-muted);
+        margin-bottom: 15px;
+        font-size: 1rem;
+        text-align: center;
+    }
+
+    .course-stats {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        color: var(--text-light);
+        font-size: 0.9rem;
+        margin-bottom: 15px;
+    }
+
+    .course-progress {
+        width: 100%;
+        margin-top: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .course-progress-bar {
+        flex: 1;
+        height: 8px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 5px;
+        overflow: hidden;
+        box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .course-progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--gold), var(--gold-light));
+        width: 0%;
+        transition: width 0.6s ease;
+        box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+    }
+
+    .course-progress span {
+        color: var(--gold);
+        font-weight: 700;
+        font-size: 1rem;
+        min-width: 40px;
+        text-align: right;
+    }
+
+    /* Playlists Section */
+    #playlists {
+        margin-top: 30px;
+    }
+
+    #playlists h2 {
+        color: var(--gold);
+        font-size: 2rem;
+        text-align: center;
+        margin-bottom: 25px;
+        text-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+    }
+
+    .video-container {
+        width: 100%;
+        position: sticky;
+        top: 60px;
+        z-index: 5;
+        background: var(--dark-bg);
+        padding: 0px 0;
+        margin-bottom: 15px;
+    }
+
+    #main-video-player {
+        width: 100%;
+        height: 0;
+        padding-bottom: 76.25%; /* 16:9 aspect ratio */
+        position: relative;
+        border-radius: 15px;
+        border: 1px solid rgba(212, 175, 55, 0.1);
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+    }
+
+    #main-video-player iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+
+    .video-info {
+        background: rgba(255, 255, 255, 0.03);
+        padding: 9px;
+        border-radius: 12px;
+        margin: 25px 0;
+        border: 0.5px solid #00ecff;
+        
+    }
+
+    #current-video-title {
+        color: var(--gold);
+        font-size: 1rem;
+        margin-bottom: 10px;
+        text-shadow: 0 0 5px rgba(212, 175, 55, 0.2);
+    }
+
+    #current-video-description {
+        color: var(--text-muted);
+        font-size: 1rem;
+        line-height: 1;
+    }
+
+    .playlist-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        padding: 2px;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 60px;
+        border: 1px solid rgba(212, 175, 55, 0.1);
+    }
+
+    .playlist-header h3 {
+        color: var(--gold);
+        font-size: 1rem;
+    }
+
+    .playlist-header span {
+        color: var(--text-light);
+        font-size: 0.7rem;
+        font-family: 'Scheherazade', serif;
+    }
+
+    #video-playlist {
+        max-height: calc(100vh - 450px);
+        overflow-y: auto;
+        padding-right: 5px;
+        scrollbar-width: thin;
+        scrollbar-color: var(--gold) rgba(255, 255, 255, 0.05);
+    }
+
+    #video-playlist::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    #video-playlist::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+    }
+
+    #video-playlist::-webkit-scrollbar-thumb {
+        background-color: var(--gold);
+        border-radius: 10px;
+    }
+
+    .playlist-item {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 12px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(212, 175, 55, 0.05);
+    }
+
+    .playlist-item:hover {
+        background: rgba(255, 255, 255, 0.08);
+        transform: translateX(5px);
+        border-color: rgba(212, 175, 55, 0.2);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .playlist-item.active {
+        background: rgba(212, 175, 55, 0.1);
+        border: 1px solid var(--gold);
+        box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
+    }
+
+    .playlist-item.completed .lesson-number {
+        background: var(--gold);
+        color: var(--dark-bg);
+    }
+
+    .lesson-number {
+        width: 35px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(212, 175, 55, 0.1);
+        color: var(--gold);
+        font-weight: 700;
+        font-size: 1rem;
+        border-radius: 50%;
+        margin-right: 15px;
+        transition: all 0.3s ease;
+        flex-shrink: 0;
+    }
+
+    .playlist-item span:nth-child(2) {
+        flex: 1;
+        color: var(--text-light);
+        font-size: 1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .playlist-item span:last-child {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        margin-left: 10px;
+        flex-shrink: 0;
+    }
+
+    /* Quran Section */
+    #quran-section {
+        margin-top: 0px;
+    }
+
+    #quran-embed {
+        width: 100%;
+        height: calc(100vh - 150px);
+        border: none;
+        border-radius: 15px;
+        border: 1px solid rgba(212, 175, 55, 0.1);
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Modals */
+    .modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(10, 20, 23, 0.95);
+        backdrop-filter: blur(15px);
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+        text-align: center;
+        z-index: 20;
+        display: none;
+        border: 1px solid rgba(212, 175, 55, 0.2);
+        max-width: 400px;
+        width: 90%;
+    }
+
+    .modal h3 {
+        color: var(--gold);
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+        text-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+    }
+
+    .modal p {
+        color: var(--text-light);
+        margin-bottom: 25px;
+        font-size: 1.1rem;
+    }
+
+    .modal-content {
+        margin: 15px 0;
+        font-size: 1rem;
+        color: var(--text-muted);
+    }
+
+    .modal-content span {
+        color: var(--gold);
+        font-weight: 700;
+    }
+
+    .modal-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 15;
+        display: none;
+    }
+
+    /* Install Prompt */
+    #install-prompt {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(10, 20, 23, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 15px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(212, 175, 55, 0.2);
+        z-index: 30;
+        display: none;
+        max-width: 90%;
+        width: 400px;
+        text-align: center;
+        animation: slideUp 0.5s ease-out;
+    }
+
+    @keyframes slideUp {
+        from { transform: translate(-50%, 100%); }
+        to { transform: translate(-50%, 0); }
+    }
+
+    #install-prompt p {
+        color: var(--text-light);
+        margin-bottom: 15px;
+        font-size: 1rem;
+    }
+
+    #install-prompt .prompt-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: rgba(10, 20, 23, 0.95);
+        backdrop-filter: blur(10px);
+        display: flex;
+        justify-content: space-around;
+        padding: 10px 0;
+        z-index: 10;
+        box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.3);
+        border-top: 1px solid rgba(212, 175, 55, 0.1);
+    }
+
+    .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: var(--text-muted);
+        text-decoration: none;
+        font-size: 0.8rem;
+        transition: all 0.3s ease;
+        padding: 5px 10px;
+        border-radius: 10px;
+    }
+
+    .nav-item i {
+        font-size: 1.2rem;
+        margin-bottom: 3px;
+    }
+
+    .nav-item.active {
+        color: var(--gold);
+        transform: translateY(-5px);
+    }
+
+    /* Mobile-specific styles */
+    @media (max-width: 768px) {
+        nav {
+            padding: 12px 15px;
+        }
+        
+        nav a {
+            font-size: 1.3rem;
+        }
+        
+        .progress-circle {
+            width: 40px;
+            height: 40px;
+        }
+        
+        .hero-section {
+            padding: 40px 15px;
+            margin: 70px 0 20px 0;
+        }
+        
+        .hero-section h1 {
+            font-size: 1.8rem;
+        }
+        
+        .video-container {
+            top: 70px;
+        }
+        
+        #video-playlist {
+            max-height: calc(100vh - 400px);
+        }
+        
+        .playlist-item {
+            padding: 12px;
+        }
+        
+        .lesson-number {
+            width: 30px;
+            height: 30px;
+            font-size: 0.9rem;
+            margin-right: 10px;
+        }
+
+        #quran-embed {
+            height: calc(100vh - 130px);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .hero-section h1 {
+            font-size: 1.6rem;
+        }
+        
+        .playlist-header {
+            flex-direction: column;
+            gap: 8px;
+            text-align: center;
+        }
+        
+        #video-playlist {
+            max-height: calc(100vh - 380px);
+        }
+        
+        .modal {
+            padding: 20px;
+        }
+        
+        .modal h3 {
+            font-size: 1.5rem;
+        }
+        
+        .modal-buttons {
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .btn {
+            width: 100%;
+        }
+    }
+
+    /* Offline Support */
+    .offline-message {
+        position: fixed;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(255, 59, 48, 0.9);
+        color: white;
+        padding: 8px 15px;
+        border-radius: 20px;
+        z-index: 100;
+        font-size: 0.9rem;
+        display: none;
+    }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div id="splash-screen">
+      <img src="https://i.postimg.cc/RZSDbCQK/holy-book-koran-with-rosary-hand-drawn-sketch-illustration-291138-9.png" width="50%">
+        <h1>ইসলামিক লার্নিং</h1>
+        <p>আপনার পবিত্র জ্ঞানের পথ</p>
+        <div class="spinner"></div>
+        <br><br>
+        <small style="font-family: Lucida Console, Courier, monospace;">© Mehedi Al Hasan Sawon</small>
+    </div>
+
+    <div class="offline-message" id="offline-message">
+<i class="fas fa-exclamation-triangle"></i>
+ আপনার ইন্টারনেট সংযোগ নেই। দয়া করে আপনার ইন্টারনেট সংযোগ করে আবার চেষ্টা করুন। <br> - ধন্যবাদ
+    </div>
+
+    <div id="app-content">
+        <nav>
+            <a href="#">ইসলামিক লার্নিং</a>
+            <div class="nav-progress">
+                <span>অগ্রগতি:</span>
+                <div class="progress-circle">
+                    <svg>
+                        <circle class="bg" cx="20" cy="20" r="17"></circle>
+                        <circle class="progress" cx="20" cy="20" r="17"></circle>
+                    </svg>
+                    <span id="progress-percentage">০%</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Home Section -->
+        <section id="home-section" class="app-section active">
+            <section class="hero-section">
+                                  <img src="Quran.jpg" alt="কোরআন শরীফ পড়তে শিখুন" width="50%"> 
+                <h1>কোরআন শরীফ পড়তে শিখুন</h1>
+                <p>অল্প সময়ে 
+সহজ উপায়ে </p>
+                <a href="#playlists" class="btn" onclick="showSection('courses-section')">শুরু করুন</a>
+            </section>
+
+            <section id="home-section" >
+                <h2>আপনার কোর্স</h2>
+                <div class="course-card" onclick="loadCourse('arabic-with-quran')">
+                    <img src="poster.jpg" alt="কোরআন শরীফ পড়তে শিখুন">
+                    <div class="course-info">
+                        <h5>কোরআন শরীফ পড়তে শিখুন</h5>
+                        <p>অল্প সময়ে 
+সহজ উপায়ে </p>
+                        <div class="course-stats">
+                            <span><i class="fas fa-book-open"></i> ১২টি পর্ব</span>
+                            <span><i class="fas fa-clock"></i> ৬ ঘণ্টা</span>
+                        </div>
+                        <div class="course-progress">
+                            <div class="course-progress-bar">
+                                <div class="course-progress-fill" id="course-progress-bar"></div>
+                            </div>
+                            <span id="course-progress-text">০%</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+                        <section class="hero-section">
+
+                <p>Mehedi Al Hasan Sawon </p>
+              <!---  <a href="#playlists" class="btn" onclick="showSection('courses-section')">আপনার যাত্রা শুরু করুন</a>--->
+            </section>
+        </section>
+
+        <!-- Courses Section -->
+        <section id="courses-section" class="app-section">
+            <div id="progress-card" class="modal">
+                <h3><i class="fas fa-star"></i> মাশাআল্লাহ!</h3>
+                <p>আপনি আপনার শিক্ষার যাত্রায় অগ্রগতি করেছেন!</p>
+                <div id="progress-details" class="modal-content"></div>
+                <div class="modal-buttons">
+                    <button onclick="closeProgressCard()" class="btn">শেখা চালিয়ে যান</button>
+                </div>
+            </div>
+
+            <div id="confirmation-popup" class="modal">
+                <h3><i class="fas fa-check-circle"></i> পর্ব সম্পূর্ণ করবেন?</h3>
+                <p>আপনি কি নিশ্চিত এই পর্বটি সম্পূর্ণ হিসেবে চিহ্নিত করতে চান?</p>
+                <div class="modal-buttons">
+                    <button id="confirm-yes" class="btn">হ্যাঁ</button>
+                    <button id="confirm-no" class="btn btn-secondary">না</button>
+                </div>
+            </div>
+
+            <div class="overlay" id="overlay"></div>
+
+            <div class="video-container">
+                <div id="main-video-player">
+                    <iframe src="https://www.youtube.com/embed/zmRGr-hW8tc?list=PLDPHd_U0ECxG3wMEgA--fdZpG9SJEGAQQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="video-info">
+                    <h3 id="current-video-title"><i class="fas fa-info-circle"></i> ভূমিকা</h3>
+                    <p id="current-video-description">কুরআনের মাধ্যমে আরবি শেখার সংক্ষিপ্ত বিবরণ।</p>
+                </div>
+            </div>
+
+            <div>
+                <div class="playlist-header">
+                    <h3><i class="fas fa-list-ol"></i> কোরআন শরীফ পড়তে শিখুন</h3>
+                    <span><span id="completed-count">০</span>/<span id="total-videos">১২</span> সম্পূর্ণ</span>
+                </div>
+                <div id="video-playlist">
+                    <div class="playlist-item active" data-lesson-id="1" onclick="changeVideo('https://www.youtube.com/embed/zmRGr-hW8tc?list=PLDPHd_U0ECxG3wMEgA--fdZpG9SJEGAQQ', this, 'ভূমিকা', 'কুরআনের মাধ্যমে আরবি শেখার সংক্ষিপ্ত বিবরণ।', '১৯:২৫')">
+                        <span class="lesson-number">১</span>
+                        <span>ভূমিকা</span>
+                        <span>১৯:২৫</span>
+                    </div>
+                    <div class="playlist-item" data-lesson-id="2" onclick="changeVideo('https://www.youtube.com/embed/8fH6g2jYkFc?list=PLDPHd_U0ECxG3wMEgA--fdZpG9SJEGAQQ', this, 'পর্ব ১', 'মৌলিক আরবি অক্ষর ও শব্দ।', '৩৩:৪২')">
+                        <span class="lesson-number">২</span>
+                        <span>পর্ব ১</span>
+                        <span>৩৩:৪২</span>
+                    </div>
+                    <div class="playlist-item" data-lesson-id="3" onclick="changeVideo('https://www.youtube.com/embed/JDPLhIpM97Q?list=PLDPHd_U0ECxG3wMEgA--fdZpG9SJEGAQQ', this, 'পর্ব ২', 'সংক্ষিপ্ত স্বরবর্ণের পরিচিতি।', '৩১:৪৫')">
+                        <span class="lesson-number">৩</span>
+                        <span>পর্ব ২</span>
+                        <span>৩১:৪৫</span>
+                    </div>
+                    <div class="playlist-item" data-lesson-id="4" onclick="changeVideo('https://www.youtube.com/embed/zPqEqpM2k5Q?list=PLDPHd_U0ECxG3wMEgA--fdZpG9SJEGAQQ', this, 'পর্ব ৩', 'দীর্ঘ স্বরবর্ণ ও মৌলিক শব্দ।', '৩৪:১২')">
+                        <span class="lesson-number">৪</span>
+                        <span>পর্ব ৩</span>
+                        <span>৩৪:১২</span>
+                    </div>
+                    <div class="playlist-item" data-lesson-id="5" onclick="changeVideo('https://www.youtube.com/embed/1s2zskqH8lc?list=PLDPHd_U0ECxG3wMEgA--fdZpG9SJEGAQQ', this, 'পর্ব ৪', 'সুকুন ও সরল বাক্য।', '৩২:৫০')">
+                        <span class="lesson-number">৫</span>
+                        <span>পর্ব ৪</span>
+                        <span>৩২:৫০</span>
+                    </div>
+                    <div class="playlist-item" data-lesson-id="6" onclick="changeVideo('https://www.youtube.com/embed/2oFpvS4xW8g?list=PLDPHd_U0ECxG3wMEgA--fdZpG9SJEGAQQ', this, 'পর্ব ৫', 'শাদ্দা ও মৌলিক ব্যাকরণ।', '৩৫:২০')">
+                        <span class="lesson-number">৬</span>
+                        <span>পর্ব ৫</span>
+                        <span>৩৫:২০</span>
+                    </div>
+                    <div class="playlist-item" data-lesson-id="7" onclick="changeVideo('https://www.youtube.com/embed/Ub2hVgoe18g?list=PLDPHd_U0ECxG3wMEgA--fdZpG9SJEGAQQ', this, 'পর্ব ৬', 'তানউইন ও বাক্য গঠন।', '৩৬:১৫')">
+                        <span class="lesson-number">৭</span>
+                        <span>পর্ব ৬</span>
+                        <span>৩৬:১৫</span>
+                    </div>
+                    <div class="playlist-item" data-lesson-id="8" onclick="changeVideo('https://www.youtube.com/embed/5kH7pXzW8s8?list=PLDPHd_U0ECxG3wMEgA--fdZpG9SJEGAQQ', this, 'পর্ব ৭', 'সর্বনাম ও কুরআনের উদাহরণ।', '৩৪:৪০')">
+                        <span class="lesson-number">৮</span>
+                        <span>পর্ব ৭</span>
+                        <span>৩৪:৪০</span>
+                    </div>
+                    <div class="playlist-item" data-lesson-id="9" onclick="changeVideo('https://www.youtube.com/embed/0r5o4o4z8g4?list=PLDPHd_U0ECxG3wMEgA--fdZpG9SJEGAQQ', this, 'পর্ব ৮', 'ক্রিয়া ও ক্রিয়া রূপান্তর।', '৩৩:৫৫')">
+                        <span class="lesson-number">৯</span>
+                        <span>পর্ব ৮</span>
+                        <span>৩৩:৫৫</span>
+                    </div>
+                    <div class="playlist-item" data-lesson-id="10" onclick="changeVideo('https://www.youtube.com/embed/dQw4w9WgXcQ?list=PLDPHd_U0ECxG3wMEgA--fdZpG9SJEGAQQ', this, 'পর্ব ৯', 'বিশেষ্য ও বিশেষণ।', '৩২:৩০')">
+                        <span class="lesson-number">১০</span>
+                        <span>পর্ব ৯</span>
+                        <span>৩২:৩০</span>
+                    </div>
+                    <div class="playlist-item" data-lesson-id="11" onclick="changeVideo('https://www.youtube.com/embed/dQw4w9WgXcQ?list=PLDPHd_U0ECxG3wMEgA--fdZpG9SJEGAQQ', this, 'পর্ব ১০', 'প্রিপজিশন ও কুরআনের বাক্যাংশ।', '৩৫:১০')">
+                        <span class="lesson-number">১১</span>
+                        <span>পর্ব ১০</span>
+                        <span>৩৫:১০</span>
+                    </div>
+                    <div class="playlist-item" data-lesson-id="12" onclick="changeVideo('https://www.youtube.com/embed/7y8u9i0o1p2?list=PLDPHd_U0ECxG3wMEgA--fdZpG9SJEGAQQ', this, 'সমাপ্তি', 'পর্যালোচনা ও পরবর্তী পদক্ষেপ।', '২০:৪৫')">
+                        <span class="lesson-number">১২</span>
+                        <span>সমাপ্তি</span>
+                        <span>২০:৪৫</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quran Section -->
+        <section id="quran-section" class="app-section">
+            <iframe id="quran-embed" src="https://quran.com/bn" allowfullscreen></iframe>
+        </section>
+
+        <!-- Progress Section -->
+        <section id="progress-section" class="app-section">
+            <div class="hero-section">
+                <h1>আপনার অগ্রগতি</h1>
+                <p>আপনার শিক্ষার যাত্রায় কতদূর এগিয়েছেন তা দেখুন</p>
+            </div>
+            
+            <div id="progress-details-container" style="margin-top: 30px; padding: 20px; background: rgba(255,255,255,0.03); border-radius: 15px;">
+                <!-- Progress details will be loaded here -->
+            </div>
+        </section>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="#" class="nav-item active" onclick="showSection('home-section')">
+            <i class="fas fa-home"></i>
+            <span>হোম</span>
+        </a>
+        <a href="#courses" class="nav-item" onclick="showSection('courses-section')">
+            <i class="fas fa-book"></i>
+            <span>কোর্স</span>
+        </a>
+        <a href="#" class="nav-item" onclick="showSection('quran-section')">
+            <i class="fas fa-quran"></i>
+            <span>কুরআন</span>
+        </a>
+        <a href="#" class="nav-item" onclick="showProgressSection()">
+            <i class="fas fa-chart-line"></i>
+            <span>প্রোগ্রেস</span>
+        </a>
+    </div>
+
+    <div id="install-prompt">
+        <p><i class="fas fa-mobile-alt"></i> এই অ্যাপটি আপনার হোম স্ক্রিনে ইনস্টল করুন</p>
+        <div class="prompt-buttons">
+            <button id="install-btn" class="btn">ইনস্টল করুন</button>
+            <button id="dismiss-btn" class="btn btn-secondary">না ধন্যবাদ</button>
+        </div>
+    </div>
+
+    <script>
+        const COMPLETED_VIDEOS_KEY = 'islamicLearningApp_completedVideos';
+        const WATCH_HISTORY_KEY = 'islamicLearningApp_watchHistory';
+        const LAST_PLAYED_KEY = 'islamicLearningApp_lastPlayed';
+        const INSTALL_PROMPT_DISMISSED_KEY = 'installPromptDismissed';
+        let currentElement = null;
+        let deferredPrompt;
+        let currentVideoId = 'zmRGr-hW8tc';
+        let currentPlaylistId = 'PLDPHd_U0ECxG3wMEgA--fdZpG9SJEGAQQ';
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                const splash = document.getElementById('splash-screen');
+                splash.style.opacity = '0';
+                setTimeout(() => {
+                    splash.style.display = 'none';
+                    const content = document.getElementById('app-content');
+                    content.classList.add('visible');
+                    initApp();
+                }, 800);
+            }, 2000);
+        });
+
+        // Main app initialization
+        function initApp() {
+            updateOnlineStatus();
+            loadCompletedVideos();
+            loadWatchHistory();
+            updateProgress();
+            
+            // Set total videos count
+            document.getElementById('total-videos').textContent = 
+                document.querySelectorAll('.playlist-item').length;
+
+            // Event listeners
+            document.getElementById('confirm-yes').addEventListener('click', confirmCompletion);
+            document.getElementById('confirm-no').addEventListener('click', closeConfirmationPopup);
+            document.getElementById('install-btn').addEventListener('click', installApp);
+            document.getElementById('dismiss-btn').addEventListener('click', dismissInstallPrompt);
+            
+            // Bottom navigation click handlers
+            document.querySelectorAll('.bottom-nav .nav-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    document.querySelectorAll('.bottom-nav .nav-item').forEach(navItem => {
+                        navItem.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                });
+            });
+
+            // Check for last played video
+            const lastPlayed = JSON.parse(localStorage.getItem(LAST_PLAYED_KEY));
+            if (lastPlayed) {
+                loadLastPlayedVideo(lastPlayed);
+            } else {
+                // Set first video as active by default
+                const firstVideo = document.querySelector('.playlist-item[data-lesson-id="1"]');
+                if (firstVideo) {
+                    firstVideo.classList.add('active');
+                }
+            }
+            
+            // Check if app is running in standalone mode
+            if (window.matchMedia('(display-mode: standalone)').matches) {
+                console.log('Running in standalone mode');
+            } else {
+                // Check if prompt was previously dismissed
+                const dismissedTime = localStorage.getItem(INSTALL_PROMPT_DISMISSED_KEY);
+                if (!dismissedTime || Date.now() > parseInt(dismissedTime)) {
+                    // Listen for install prompt
+                    window.addEventListener('beforeinstallprompt', (e) => {
+                        e.preventDefault();
+                        deferredPrompt = e;
+                        // Show prompt after 30 seconds
+                        setTimeout(() => {
+                            if (!deferredPrompt) return;
+                            document.getElementById('install-prompt').style.display = 'block';
+                        }, 30000);
+                    });
+                }
+            }
+        }
+
+        // Show specific section and hide others
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.app-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show requested section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Special handling for Quran section to resize iframe
+            if (sectionId === 'quran-section') {
+                setTimeout(() => {
+                    const quranEmbed = document.getElementById('quran-embed');
+                    quranEmbed.style.height = `${window.innerHeight - 150}px`;
+                }, 100);
+            }
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Show progress section with details
+        function showProgressSection() {
+            showSection('progress-section');
+            const progressContainer = document.getElementById('progress-details-container');
+            const completedCount = document.querySelectorAll('.playlist-item.completed').length;
+            const totalVideos = document.querySelectorAll('.playlist-item').length;
+            const totalTime = calculateTotalTime(JSON.parse(localStorage.getItem(COMPLETED_VIDEOS_KEY)) || {});
+            const lastCompleted = getLastCompletedLesson();
+            
+            progressContainer.innerHTML = `
+                <h2 style="color: var(--gold); text-align: center; margin-bottom: 20px;">আপনার অগ্রগতি সারাংশ</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                    <div style="background: rgba(212, 175, 55, 0.1); padding: 15px; border-radius: 10px; border: 1px solid rgba(212, 175, 55, 0.2);">
+                        <h3 style="color: var(--gold); margin-bottom: 10px;"><i class="fas fa-check-circle"></i> সম্পূর্ণ পর্ব</h3>
+                        <p style="font-size: 2rem; color: var(--text-light); text-align: center;">${completedCount}/${totalVideos}</p>
+                    </div>
+                    <div style="background: rgba(212, 175, 55, 0.1); padding: 15px; border-radius: 10px; border: 1px solid rgba(212, 175, 55, 0.2);">
+                        <h3 style="color: var(--gold); margin-bottom: 10px;"><i class="fas fa-hourglass-half"></i> মোট সময় দেখা</h3>
+                        <p style="font-size: 2rem; color: var(--text-light); text-align: center;">${totalTime}</p>
+                    </div>
+                    ${lastCompleted ? `
+                    <div style="background: rgba(212, 175, 55, 0.1); padding: 15px; border-radius: 10px; border: 1px solid rgba(212, 175, 55, 0.2);">
+                        <h3 style="color: var(--gold); margin-bottom: 10px;"><i class="fas fa-clock"></i> সর্বশেষ পর্ব</h3>
+                        <p style="font-size: 1.2rem; color: var(--text-light); text-align: center;">${lastCompleted.title}</p>
+                        <p style="color: var(--text-muted); text-align: center; font-size: 0.9rem;">${new Date(lastCompleted.date).toLocaleDateString()}</p>
+                    </div>
+                    ` : ''}
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <h3 style="color: var(--gold); border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding-bottom: 10px; margin-bottom: 15px;">
+                        <i class="fas fa-list-check"></i> সম্পূর্ণ পর্বসমূহ
+                    </h3>
+                    <div id="completed-lessons-list" style="display: grid; gap: 10px;">
+                        <!-- Completed lessons will be listed here -->
+                    </div>
+                </div>
+            `;
+            
+            // Add completed lessons to list
+            const completedLessonsList = document.getElementById('completed-lessons-list');
+            const completedVideos = JSON.parse(localStorage.getItem(COMPLETED_VIDEOS_KEY)) || {};
+            
+            if (Object.keys(completedVideos).length === 0) {
+                completedLessonsList.innerHTML = `
+                    <p style="text-align: center; color: var(--text-muted);">
+                        <i class="fas fa-info-circle"></i> এখনো কোন পর্ব সম্পূর্ণ করেননি
+                    </p>
+                `;
+            } else {
+                Object.entries(completedVideos).forEach(([lessonId, video]) => {
+                    const lessonItem = document.createElement('div');
+                    lessonItem.style.display = 'flex';
+                    lessonItem.style.justifyContent = 'space-between';
+                    lessonItem.style.alignItems = 'center';
+                    lessonItem.style.padding = '12px';
+                    lessonItem.style.background = 'rgba(255,255,255,0.03)';
+                    lessonItem.style.borderRadius = '8px';
+                    lessonItem.style.border = '1px solid rgba(212, 175, 55, 0.1)';
+                    
+                    lessonItem.innerHTML = `
+                        <div>
+                            <span style="color: var(--gold); font-weight: bold;">${video.title}</span>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">${new Date(video.completedAt).toLocaleDateString()}</div>
+                        </div>
+                        <span style="color: var(--gold);">${video.duration}</span>
+                    `;
+                    
+                    completedLessonsList.appendChild(lessonItem);
+                });
+            }
+        }
+
+        // [Rest of the JavaScript functions remain the same as previous version...]
+        // Load last played video from localStorage
+        function loadLastPlayedVideo(lastPlayed) {
+            const playlistItem = document.querySelector(`.playlist-item[data-lesson-id="${lastPlayed.lessonId}"]`);
+            if (playlistItem) {
+                changeVideo(
+                    `https://www.youtube.com/embed/${lastPlayed.videoId}?list=${lastPlayed.playlistId}`,
+                    playlistItem,
+                    lastPlayed.title,
+                    lastPlayed.description,
+                    lastPlayed.duration
+                );
+                
+                // Try to restore playback position
+                const watchHistory = JSON.parse(localStorage.getItem(WATCH_HISTORY_KEY)) || {};
+                if (watchHistory[lastPlayed.videoId]) {
+                    console.log(`Resume video at ${watchHistory[lastPlayed.videoId]} seconds`);
+                }
+            }
+        }
+
+        // Handle app installation
+        function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the install prompt');
+                        document.getElementById('install-prompt').style.display = 'none';
+                        // Don't show again for a month
+                        localStorage.setItem(INSTALL_PROMPT_DISMISSED_KEY, Date.now() + (30 * 24 * 60 * 60 * 1000));
+                    }
+                    deferredPrompt = null;
+                });
+            }
+        }
+
+        // Dismiss install prompt
+        function dismissInstallPrompt() {
+            document.getElementById('install-prompt').style.display = 'none';
+            // Don't show again for a month
+            localStorage.setItem(INSTALL_PROMPT_DISMISSED_KEY, Date.now() + (30 * 24 * 60 * 60 * 1000));
+        }
+
+        // Load completed videos from localStorage
+        function loadCompletedVideos() {
+            const completedVideos = JSON.parse(localStorage.getItem(COMPLETED_VIDEOS_KEY)) || {};
+            const playlistItems = document.querySelectorAll('.playlist-item');
+            playlistItems.forEach(item => {
+                const lessonId = item.dataset.lessonId;
+                if (completedVideos[lessonId]) {
+                    item.classList.add('completed');
+                }
+            });
+            updateCompletedCount();
+        }
+
+        // Load watch history from localStorage
+        function loadWatchHistory() {
+            const watchHistory = JSON.parse(localStorage.getItem(WATCH_HISTORY_KEY)) || {};
+            // Could be used to show watched status or progress indicators
+        }
+
+        // Update completed videos count
+        function updateCompletedCount() {
+            const completedCount = document.querySelectorAll('.playlist-item.completed').length;
+            document.getElementById('completed-count').textContent = completedCount;
+        }
+
+        // Update progress indicators
+        function updateProgress() {
+            const totalVideos = document.querySelectorAll('.playlist-item').length;
+            const completedVideos = document.querySelectorAll('.playlist-item.completed').length;
+            const progress = totalVideos > 0 ? (completedVideos / totalVideos) * 100 : 0;
+            
+            // Update circular progress
+            const progressCircle = document.querySelector('.progress-circle .progress');
+            const circumference = 2 * Math.PI * 17;
+            const dashArray = (progress / 100) * circumference;
+            progressCircle.style.strokeDasharray = `${dashArray} ${circumference}`;
+            document.getElementById('progress-percentage').textContent = `${Math.round(progress)}%`;
+
+            // Update course progress bar
+            document.getElementById('course-progress-bar').style.width = `${progress}%`;
+            document.getElementById('course-progress-text').textContent = `${Math.round(progress)}%`;
+        }
+
+        // Show progress modal
+        function showProgress() {
+            const completedCount = document.querySelectorAll('.playlist-item.completed').length;
+            const totalVideos = document.querySelectorAll('.playlist-item').length;
+            const progressDetails = document.getElementById('progress-details');
+            
+            const totalTime = calculateTotalTime(JSON.parse(localStorage.getItem(COMPLETED_VIDEOS_KEY)) || {});
+            const lastCompleted = getLastCompletedLesson();
+            
+            progressDetails.innerHTML = `
+                <div><i class="fas fa-check-circle"></i> সম্পূর্ণ: <span>${completedCount}/${totalVideos}</span> পর্ব</div>
+                ${lastCompleted ? `<div><i class="fas fa-clock"></i> সর্বশেষ পর্ব: <span>${lastCompleted.title}</span></div>` : ''}
+                <div><i class="fas fa-hourglass-half"></i> মোট সময় দেখা: <span>${totalTime}</span></div>
+            `;
+            
+            document.getElementById('progress-card').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+
+        // Get last completed lesson details
+        function getLastCompletedLesson() {
+            const completedVideos = JSON.parse(localStorage.getItem(COMPLETED_VIDEOS_KEY)) || {};
+            let lastLesson = null;
+            let lastDate = 0;
+            
+            Object.entries(completedVideos).forEach(([lessonId, video]) => {
+                const date = new Date(video.completedAt).getTime();
+                if (date > lastDate) {
+                    lastDate = date;
+                    lastLesson = {
+                        title: video.title,
+                        date: video.completedAt
+                    };
+                }
+            });
+            
+            return lastLesson;
+        }
+
+        // Close progress modal
+        function closeProgressCard() {
+            document.getElementById('progress-card').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+
+        // Show confirmation popup
+        function showConfirmationPopup(element) {
+            currentElement = element;
+            document.getElementById('confirmation-popup').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+
+        // Close confirmation popup
+        function closeConfirmationPopup() {
+            document.getElementById('confirmation-popup').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+            currentElement = null;
+        }
+
+        // Confirm video completion
+        function confirmCompletion() {
+            if (currentElement) {
+                markVideoCompleted(currentElement);
+                closeConfirmationPopup();
+            }
+        }
+
+        // Change the currently playing video
+        function changeVideo(url, element, title, description, duration) {
+            const videoId = url.match(/embed\/([^?]+)/)[1];
+            currentVideoId = videoId;
+            
+            // Update iframe src with autoplay
+            const iframe = document.getElementById('main-video-player').querySelector('iframe');
+            iframe.src = `${url}&autoplay=1`;
+            
+            // Update video info
+            document.getElementById('current-video-title').textContent = title;
+            document.getElementById('current-video-description').textContent = description;
+
+            // Update active state
+            document.querySelectorAll('.playlist-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            element.classList.add('active');
+
+            // Save as last played
+            const lessonId = element.dataset.lessonId;
+            localStorage.setItem(LAST_PLAYED_KEY, JSON.stringify({
+                lessonId,
+                videoId,
+                playlistId: currentPlaylistId,
+                title,
+                description,
+                duration
+            }));
+
+            // Show completion confirmation if not already completed
+            if (!element.classList.contains('completed')) {
+                showConfirmationPopup(element);
+            }
+        }
+
+        // Mark video as completed
+        function markVideoCompleted(element) {
+            const lessonId = element.dataset.lessonId;
+            element.classList.add('completed');
+
+            // Update completed videos in localStorage
+            const completedVideos = JSON.parse(localStorage.getItem(COMPLETED_VIDEOS_KEY)) || {};
+            if (!completedVideos[lessonId]) {
+                completedVideos[lessonId] = {
+                    title: element.querySelector('span:nth-child(2)').textContent,
+                    duration: element.querySelector('span:last-child').textContent,
+                    completedAt: new Date().toISOString()
+                };
+                localStorage.setItem(COMPLETED_VIDEOS_KEY, JSON.stringify(completedVideos));
+            }
+
+            // Update UI
+            updateCompletedCount();
+            updateProgress();
+
+            // Show progress card
+            const totalTime = calculateTotalTime(completedVideos);
+            showProgressCard(completedVideos[lessonId].title, totalTime);
+        }
+
+        // Calculate total watch time
+        function calculateTotalTime(completedVideos) {
+            let totalMinutes = 0;
+            Object.values(completedVideos).forEach(video => {
+                const [minutes, seconds] = video.duration.split(':').map(Number);
+                totalMinutes += minutes + (seconds / 60);
+            });
+            const hours = Math.floor(totalMinutes / 60);
+            const minutes = Math.round(totalMinutes % 60);
+            return `${hours}ঘ ${minutes}মি`;
+        }
+
+        // Load course (scroll to playlist)
+        function loadCourse(courseId) {
+            showSection('courses-section');
+            window.scrollTo({
+                top: document.getElementById('playlists').offsetTop - 80,
+                behavior: 'smooth'
+            });
+        }
+
+        // Show progress card after completion
+        function showProgressCard(title, totalTime) {
+            const progressDetails = document.getElementById('progress-details');
+            const completedCount = document.querySelectorAll('.playlist-item.completed').length;
+            const totalVideos = document.querySelectorAll('.playlist-item').length;
+            
+            progressDetails.innerHTML = `
+                <div><i class="fas fa-check-circle"></i> সম্পূর্ণ: <span>${completedCount}/${totalVideos}</span> পর্ব</div>
+                <div><i class="fas fa-clock"></i> সম্পূর্ণ পর্ব: <span>${title}</span></div>
+                <div><i class="fas fa-hourglass-half"></i> মোট সময় দেখা: <span>${totalTime}</span></div>
+            `;
+            
+            document.getElementById('progress-card').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+
+        // Online/offline event listeners
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+
+        function updateOnlineStatus() {
+            const offlineMessage = document.getElementById('offline-message');
+            if (navigator.onLine) {
+                offlineMessage.style.display = 'none';
+            } else {
+                offlineMessage.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
