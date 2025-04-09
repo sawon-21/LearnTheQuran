@@ -628,7 +628,7 @@
         transform: translateX(-50%);
         background: rgba(10, 20, 23, 0.95);
         backdrop-filter: blur(10px);
-        padding: 15px;
+        padding: 125px;
         border-radius: 15px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         border: 1px solid rgba(212, 175, 55, 0.2);
@@ -637,6 +637,7 @@
         max-width: 90%;
         width: 400px;
         text-align: center;
+        font-size: 2.9rem;
         animation: slideUp 0.5s ease-out;
     }
 
@@ -647,8 +648,8 @@
 
     #install-prompt p {
         color: var(--text-light);
-        margin-bottom: 15px;
-        font-size: 1rem;
+        margin-bottom: 5px;
+        font-size: 2rem;
     }
 
     #install-prompt .prompt-buttons {
@@ -1284,8 +1285,9 @@
     <div id="install-prompt">
         <p><i class="fas fa-mobile-alt"></i> এই অ্যাপটি আপনার হোম স্ক্রিনে ইনস্টল করুন</p>
         <div class="prompt-buttons">
-            <button id="install-btn" class="btn">ইনস্টল করুন</button>
-            <button id="dismiss-btn" class="btn btn-secondary">না ধন্যবাদ</button>
+            <button id="install-btn" class="btn">Install </button>
+            <button id="dismiss-btn" class="
+            "></button>
         </div>
     </div>
 
@@ -1658,7 +1660,7 @@ function handleInstallPrompt() {
         deferredPrompt = e;
         setTimeout(() => {
             if (deferredPrompt) document.getElementById('install-prompt').style.display = 'block';
-        }, 30000);
+        }, 30);
     });
 }
         // Show specific section and hide others
