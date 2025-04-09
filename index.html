@@ -939,10 +939,15 @@
     margin-bottom: 8px;
 }
 
-.review-content {
-    color: var(--text-light);
-    line-height: 1.5;
-    margin-bottom: 10px;
+.review-item {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 16px;
+    padding: 10px;
+    margin: 0 10px;
+    border: 1px solid rgba(212, 175, 55, 0.1);
+    min-width: calc(100% - 40px); /* Existing style */
+    width: 100%; /* Ensures it takes full available width */
+    box-sizing: border-box; /* Includes padding and border in width calculation */
 }
 
 /* Like/Dislike Buttons */
@@ -1079,7 +1084,7 @@
   .quote-arabic {
     font-family: 'Scheherazade', serif;
     font-size: 14px;
-    color: #1abc9c;
+    color: pink;
     margin-bottom: 10px;
     direction: rtl;
     text-align: right;
@@ -1131,7 +1136,7 @@
 
         <!-- Home Section -->
         <section id="home-section" class="app-section active">
-        <section class="hero-section">
+        <section class="hero-section" style="background-image: url('https://i.postimg.cc/6QVsgy6g/1000048937.jpg'); background-size: cover;">
     <div class="quote-who" id="quoteWho"></div>
     <div class="quote-arabic" id="quoteArabic"></div>
     <div class="quote-bangla" id="quoteBangla"></div>
