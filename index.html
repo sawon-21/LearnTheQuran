@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#0a1417">
-    <meta name="description" content="কোরআন শরীফ পড়তে শিখুনুন - QuranicRoots">
+    <meta name="description" content="কোরআন শরীফ পড়তে শিখুন- QuranicRoots">
     <title>QuranicRoots</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+Bengali:300,400,700&display=swap">
         <meta property="og:image" content="logo.png">
@@ -1099,6 +1099,18 @@
      font-style: italic;
       color: #bdc3c7;
   }
+  #qa-section {
+    margin-top: 0px;
+}
+
+#qa-embed {
+    width: 100%;
+    height: calc(100vh - 150px);
+    border: none;
+    border-radius: 15px;
+    border: 1px solid rgba(212, 175, 55, 0.1);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+}
 /* Rest of the existing review-related CSS remains unchanged */
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -1454,7 +1466,10 @@
         <section id="quran-section" class="app-section">
             <iframe id="quran-embed" src="https://quran.com/bn" allowfullscreen></iframe>
         </section>
-
+<!-- Add this after the #progress-section -->
+<section id="qa-section" class="app-section">
+    <iframe id="qa-embed" src="https://www.iqa.info/" allowfullscreen></iframe>
+</section>
         <!-- Progress Section -->
         <section id="progress-section" class="app-section">
             <div class="hero-section">
@@ -1468,25 +1483,28 @@
         </section>
     </div>
 
-    <div class="bottom-nav">
-        <a href="#" class="nav-item active" onclick="showSection('home-section')">
-            <i class="fas fa-home"></i>
-            <span>হোম</span>
-        </a>
-        <a href="#courses" class="nav-item" onclick="showSection('courses-section')">
-            <i class="fas fa-book"></i>
-            <span>কোর্স</span>
-        </a>
-        <a href="#" class="nav-item" onclick="showSection('quran-section')">
-            <i class="fas fa-quran"></i>
-            <span>কুরআন</span>
-        </a>
-        <a href="#" class="nav-item" onclick="showProgressSection()">
-            <i class="fas fa-chart-line"></i>
-            <span>প্রোগ্রেস</span>
-        </a>
-    </div>
-
+<div class="bottom-nav">
+    <a href="#" class="nav-item active" onclick="showSection('home-section')">
+        <i class="fas fa-home"></i>
+        <span>হোম</span>
+    </a>
+    <a href="#courses" class="nav-item" onclick="showSection('courses-section')">
+        <i class="fas fa-book"></i>
+        <span>কোর্স</span>
+    </a>
+    <a href="#" class="nav-item" onclick="showSection('quran-section')">
+        <i class="fas fa-quran"></i>
+        <span>কুরআন</span>
+    </a>
+    <a href="#" class="nav-item" onclick="showSection('qa-section')">
+        <i class="fas fa-question-circle"></i>
+        <span>ইসলামিক Q&A</span>
+    </a>
+    <a href="#" class="nav-item" onclick="showProgressSection()">
+        <i class="fas fa-chart-line"></i>
+        <span>প্রোগ্রেস</span>
+    </a>
+</div>
     <div id="install-prompt">
         <p><i class="fas fa-mobile-alt"></i> এই অ্যাপটি আপনার হোম স্ক্রিনে ইনস্টল করুন</p>
         <div class="prompt-buttons">
@@ -1869,26 +1887,31 @@ function handleInstallPrompt() {
     });
 }
         // Show specific section and hide others
-        function showSection(sectionId) {
-            // Hide all sections
-            document.querySelectorAll('.app-section').forEach(section => {
-                section.classList.remove('active');
-            });
-            
-            // Show requested section
-            document.getElementById(sectionId).classList.add('active');
-            
-            // Special handling for Quran section to resize iframe
-            if (sectionId === 'quran-section') {
-                setTimeout(() => {
-                    const quranEmbed = document.getElementById('quran-embed');
-                    quranEmbed.style.height = `${window.innerHeight - 150}px`;
-                }, 100);
-            }
-            
-            // Scroll to top
-            window.scrollTo(0, 0);
-        }
+function showSection(sectionId) {
+    // Hide all sections
+    document.querySelectorAll('.app-section').forEach(section => {
+        section.classList.remove('active');
+    });
+    
+    // Show requested section
+    document.getElementById(sectionId).classList.add('active');
+    
+    // Special handling for Quran and Q&A sections to resize iframe
+    if (sectionId === 'quran-section') {
+        setTimeout(() => {
+            const quranEmbed = document.getElementById('quran-embed');
+            quranEmbed.style.height = `${window.innerHeight - 150}px`;
+        }, 100);
+    } else if (sectionId === 'qa-section') {
+        setTimeout(() => {
+            const qaEmbed = document.getElementById('qa-embed');
+            qaEmbed.style.height = `${window.innerHeight - 150}px`;
+        }, 100);
+    }
+    
+    // Scroll to top
+    window.scrollTo(0, 0);
+}
 
         // Show progress section with details
         function showProgressSection() {
