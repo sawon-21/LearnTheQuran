@@ -1,0 +1,245 @@
+:root {
+    --primary: #2CA4AB;
+    --secondary: #1F8B8F;
+    --dark: #0E2E3A;
+    --light: #F5F7FA;
+    --accent: #F9A825;
+    --text: #333333;
+    --bg: #FFFFFF;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Scheherazade', serif;
+}
+
+
+.container {
+    position: relative;
+    top: 10px;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 15px;
+    min-height: 80vh;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.header h1 {
+    color: var(--dark);
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 3px;
+}
+
+.date-display {
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--dark);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-size: 17px;
+}
+
+.location {
+    display: flex;
+    background-color: var(--light);
+    border-radius: 10px;
+    padding: 2px 18px;
+    align-items: center;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border-left: 14px solid green;
+    border-right: 14px solid green;
+}
+
+.location i {
+    color: var(--primary);
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+.location p {
+    font-size: 13px;
+    color: black;
+}
+
+.prayer-times {
+    background-color: #1c2526;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    margin-bottom: 15px;
+}
+
+.prayer-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.prayer-card:last-child {
+    border-bottom: none;
+}
+
+.prayer-name {
+    font-weight: 500;
+    color: white;
+    font-size: 14px;
+}
+
+.prayer-time {
+    text-align: right;
+}
+
+.prayer-time .main-time {
+    font-weight: 600;
+    color: var(--primary);
+    font-size: 14px;
+}
+
+.prayer-time .period {
+    font-size: 10px;
+    color: #666;
+    margin-top: 2px;
+}
+
+.current-prayer {
+    background-color: var(--primary);
+    color: white;
+    border-radius: 6px;
+    padding: 6px 8px;
+}
+
+.current-prayer .prayer-name,
+.current-prayer .main-time {
+    color: white;
+}
+
+.current-prayer .period {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.next-prayer {
+    background-color: #444;
+    color: ;
+    border-left: 20px solid var(--primary);
+    border-radius: 6px;
+    padding: 6px 8px;
+}
+
+.footer {
+    text-align: center;
+    font-size: 11px;
+    color: #666;
+    margin-top: 15px;
+}
+
+.highlight-box {
+    background-color: var(--dark);
+    color: white;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.highlight-box h3 {
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: var(--accent);
+}
+
+.highlight-content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.highlight-item {
+    text-align: center;
+}
+
+.highlight-item .value {
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--accent);
+}
+
+.highlight-item .label {
+    font-size: 20px;
+    opacity: 0.8;
+}
+
+.floating-icon {
+    position: fixed;
+    top: 70px;
+    right: 15px;
+    background: var(--primary);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.floating-icon:hover {
+    background: var(--accent);
+    transform: scale(1.1);
+}
+
+.floating-icon.notify {
+    animation: pulse 1.5s infinite;
+}
+
+.floating-icon i {
+    font-size: 18px;
+    color: white;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(13, 202, 240, 0.7); }
+    70% { transform: scale(1.1); box-shadow: 0 0 0 8px rgba(13, 202, 240, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(13, 202, 240, 0); }
+}
+
+.hidden {
+    display: none;
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+        max-width: 100%;
+    }
+    .prayer-name {
+        font-size: 26px;
+    }
+    .prayer-time .main-time {
+        font-size: 26px;
+    }
+    .header h1 {
+        font-size: 18px;
+    }
+    .highlight-item .value {
+        font-size: 30px;
+    }
+    .highlight-item .label {
+        font-size: 12px;
+    }
+}
