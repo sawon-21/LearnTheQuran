@@ -7,6 +7,8 @@
     <meta name="description" content="কোরআন শরীফ পড়তে শিখুন - QuranicRoots">
     <title>QuranicRoots</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Noto+Sans+Bengali:wght@400;600&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+Bengali:300,400,700&display=swap">
         <meta property="og:image" content="logo.png">
@@ -1152,18 +1154,14 @@
 
         <!-- Home Section -->
         <section id="home-section" class="app-section active">
-              <div class="container">
+    <div class="container">
         <div class="header">
         </div>
         <div class="date-display">
             <span id="gregorianDate"></span>
             <span id="hijriDate"></span>
         </div>
-
-        <div class="location">
-            <i class="fas fa-map-marker-alt"></i>
-            <p id="locationInfo">অবস্থান লোড হচ্ছে...</p>
-        </div>
+            <small id="locationInfo">অবস্থান লোড হচ্ছে...</small>
 
         <div class="highlight-box">
             <h3>নামাজের সময়সূচি - </h3>
@@ -1182,36 +1180,37 @@
                 </div>
             </div>
         </div>
+        <small align="center">আপনার নামাজ ট্রাকিং করতে ✔ দিন</small>
         <div class="prayer-times" id="prayerTimeContainer">
-            <div class="prayer-card">
+            <div class="prayer-card" data-prayer="Fajr">
                 <div class="prayer-name">ফজর</div>
                 <div class="prayer-time">
                     <div class="main-time" id="fajrTime">--:--</div>
                     <div class="period" id="fajrPeriod">--:-- - --:--</div>
                 </div>
             </div>
-            <div class="prayer-card">
+            <div class="prayer-card" data-prayer="Dhuhr">
                 <div class="prayer-name">যোহর</div>
                 <div class="prayer-time">
                     <div class="main-time" id="dhuhrTime">--:--</div>
                     <div class="period" id="dhuhrPeriod">--:-- - --:--</div>
                 </div>
             </div>
-            <div class="prayer-card">
+            <div class="prayer-card" data-prayer="Asr">
                 <div class="prayer-name">আসর</div>
                 <div class="prayer-time">
                     <div class="main-time" id="asrTime">--:--</div>
                     <div class="period" id="asrPeriod">--:-- - --:--</div>
                 </div>
             </div>
-            <div class="prayer-card">
+            <div class="prayer-card" data-prayer="Maghrib">
                 <div class="prayer-name">মাগরিব</div>
                 <div class="prayer-time">
                     <div class="main-time" id="maghribTime">--:--</div>
                     <div class="period" id="maghribPeriod">--:-- - --:--</div>
                 </div>
             </div>
-            <div class="prayer-card">
+            <div class="prayer-card" data-prayer="Isha">
                 <div class="prayer-name">এশা</div>
                 <div class="prayer-time">
                     <div class="main-time" id="ishaTime">--:--</div>
@@ -1221,13 +1220,54 @@
         </div>
 
         <div class="footer">
-            <p>সর্বশেষ নামাজের সময়সূচি আপডেট হয়েছে : <span id="updateTime"></span></p>
+            <p>সর্বশেষ নামাজের সময়সূচি আপডেট হয়েছে : <span id="updateTime"></span> মিনিটে</p>
+            <div id="dailyReport" class="report-container hidden">
+                <div class="report-header">
+                    <div class="report-title">আজকের রিপোর্ট</div>
+                </div>
+                <div class="report-stats">
+                    <div class="report-stat">
+                        <div class="value" id="todayCompleted">০</div>
+                        <div class="label">পড়া হয়েছে</div>
+                    </div>
+                    <div class="report-stat">
+                        <div class="value" id="todayRemaining">৫</div>
+                        <div class="label">বাকি আছে</div>
+                    </div>
+                </div>
+            </div>
+            <div id="monthlyReport" class="report-container hidden">
+                <div class="report-header">
+                    <div class="report-title">মাসিক রিপোর্ট</div>
+                    <div class="report-date" id="monthlyReportDate"></div>
+                </div>
+                <div class="report-stats">
+                    <div class="report-stat">
+                        <div class="value" id="monthlyTotal">০</div>
+                        <div class="label">মোট নামাজ</div>
+                    </div>
+                    <div class="report-stat">
+                        <div class="value" id="monthlyCompleted">০</div>
+                        <div class="label">পড়া হয়েছে</div>
+                    </div>
+                    <div class="report-stat">
+                        <div class="value" id="monthlyRate">০%</div>
+                        <div class="label">সম্পূর্ণতা</div>
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar" id="monthlyProgress" style="width: 0%"></div>
+                </div>
+                <div class="prayer-details" id="prayerDetails"></div>
+            </div>
         </div>
     </div>
 
     <div class="floating-icon" id="floatingIcon">
-<i class="fa fa-eye-slash"></i>
+        <i class="fa fa-eye-slash"></i>
     </div>
+
+    <div id="notification" class="notification hidden"></div>
         <section class="hero-section" style="background-image: url('https://i.postimg.cc/6QVsgy6g/1000048937.jpg'); background-size: cover;">
     <div class="quote-who" id="quoteWho"></div>
     <div class="quote-arabic" id="quoteArabic"></div>
@@ -2005,14 +2045,13 @@
     <script>
 // Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyBzvajFC_47PW9Z0EHRZoT-hrmqnkL0KNI",
-    authDomain: "mehedi-catting.firebaseapp.com",
-    databaseURL: "https://mehedi-catting-default-rtdb.firebaseio.com",
-    projectId: "mehedi-catting",
-    storageBucket: "mehedi-catting.firebasestorage.app",
-    messagingSenderId: "3798147418",
-    appId: "1:3798147418:web:ea9a059c8db3c147319363",
-    measurementId: "G-CFGBXWVC3V"
+    apiKey: "AIzaSyAJl2YyWNd9YWhzMXAU8EthUWCtSS7PpYU",
+  authDomain: "review-9b86c.firebaseapp.com",
+  projectId: "review-9b86c",
+  storageBucket: "review-9b86c.firebasestorage.app",
+  messagingSenderId: "324484916841",
+  appId: "1:324484916841:web:5839c7e62c2e91d70024f8",
+  measurementId: "G-RM0SR8EFTD"
 };
 
 // Constants
