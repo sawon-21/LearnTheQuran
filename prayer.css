@@ -12,13 +12,11 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Scheherazade', serif;
 }
-
 
 .container {
     position: relative;
-    top: 10px;
+    top: 0px;
     max-width: 400px;
     margin: 0 auto;
     padding: 15px;
@@ -54,7 +52,7 @@
     display: flex;
     background-color: var(--light);
     border-radius: 10px;
-    padding: 2px 18px;
+    padding: 2px 10px;
     align-items: center;
     margin-bottom: 15px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
@@ -73,6 +71,7 @@
     color: black;
 }
 
+
 .prayer-times {
     background-color: #1c2526;
     border-radius: 8px;
@@ -87,6 +86,7 @@
     align-items: center;
     padding: 8px 0;
     border-bottom: 1px solid #eee;
+    cursor: pointer;
 }
 
 .prayer-card:last-child {
@@ -133,7 +133,6 @@
 
 .next-prayer {
     background-color: #444;
-    color: ;
     border-left: 20px solid var(--primary);
     border-radius: 6px;
     padding: 6px 8px;
@@ -242,4 +241,132 @@
     .highlight-item .label {
         font-size: 12px;
     }
+}
+
+.prayer-status {
+    margin-left: 5px;
+     font-size: 30px;
+    font-weight: bold;
+}
+
+.prayer-done {
+    color: #4CAF50;
+}
+
+.prayer-not-done {
+    color: #F44336;
+}
+
+.report-container {
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 15px;
+    font-size: 12px;
+}
+
+.report-header {
+    margin-bottom: 5px;
+    color: var(--dark);
+    text-align: center;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.report-title {
+    flex: 1;
+    text-align: center;
+}
+
+.report-date {
+    font-size: 10px;
+    color: #233;
+}
+
+.report-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 8px;
+}
+
+.report-stat {
+    text-align: center;
+    flex: 1;
+}
+
+.report-stat .value {
+    font-weight: bold;
+    color: var(--primary);
+    font-size: 24px;
+}
+
+.report-stat .label {
+    font-size: 20px;
+    color: #666;
+}
+
+.prayer-details {
+    margin-top: 10px;
+    font-size: 21px;
+    font-weight: bold;
+}
+
+.prayer-detail {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 3px;
+}
+
+.prayer-detail-name {
+    font-weight: bold;
+}
+
+.prayer-detail-count {
+    color: var(--primary);
+}
+
+.progress-container {
+    width: 100%;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+.progress-bar {
+    height: 6px;
+    background-color: var(--primary);
+    border-radius: 5px;
+    transition: width 0.5s ease;
+}
+
+.notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--primary);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    z-index: 1000;
+    animation: slideUp 0.3s ease-out;
+    max-width: 80%;
+    text-align: center;
+}
+
+@keyframes slideUp {
+    from { bottom: -50px; opacity: 0; }
+    to { bottom: 20px; opacity: 1; }
+}
+
+.notification.hide {
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from { bottom: 20px; opacity: 1; }
+    to { bottom: -50px; opacity: 0; }
 }
