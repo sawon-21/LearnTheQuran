@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#0a1417">
-    <meta name="description" content="কোরআন শরীফ পড়তে শিখুন- QuranicRoots">
+    <meta name="description" content="কোরআন শরীফ পড়তে শিখুন - QuranicRoots">
     <title>QuranicRoots</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+Bengali:300,400,700&display=swap">
         <meta property="og:image" content="logo.png">
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Noto+Sans+Bengali:wght@400;600&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="prayer.css">
     <style>
     @import url('https://fonts.maateen.me/apona-lohit/font.css');
     :root {
@@ -1148,6 +1150,82 @@
 
         <!-- Home Section -->
         <section id="home-section" class="app-section active">
+              <div class="container">
+        <div class="header">
+        </div>
+        <div class="date-display">
+            <span id="gregorianDate"></span>
+            <span id="hijriDate"></span>
+        </div>
+
+        <div class="location">
+            <i class="fas fa-map-marker-alt"></i>
+            <p id="locationInfo">অবস্থান লোড হচ্ছে...</p>
+        </div>
+
+        <div class="highlight-box">
+            <h3>নামাজের সময়সূচি - </h3>
+            <div class="highlight-content">
+                <div class="highlight-item">
+                    <div class="value" id="currentPrayerName">--</div>
+                    <div class="label">বর্তমান</div>
+                </div>
+                <div class="highlight-item">
+                    <div class="value" id="nextPrayerName">--</div>
+                    <div class="label">পরবর্তী</div>
+                </div>
+                <div class="highlight-item">
+                    <div class="value" id="countdownTimer">--:--:--</div>
+                    <div class="label">সময় বাকি</div>
+                </div>
+            </div>
+        </div>
+        <div class="prayer-times" id="prayerTimeContainer">
+            <div class="prayer-card">
+                <div class="prayer-name">ফজর</div>
+                <div class="prayer-time">
+                    <div class="main-time" id="fajrTime">--:--</div>
+                    <div class="period" id="fajrPeriod">--:-- - --:--</div>
+                </div>
+            </div>
+            <div class="prayer-card">
+                <div class="prayer-name">যোহর</div>
+                <div class="prayer-time">
+                    <div class="main-time" id="dhuhrTime">--:--</div>
+                    <div class="period" id="dhuhrPeriod">--:-- - --:--</div>
+                </div>
+            </div>
+            <div class="prayer-card">
+                <div class="prayer-name">আসর</div>
+                <div class="prayer-time">
+                    <div class="main-time" id="asrTime">--:--</div>
+                    <div class="period" id="asrPeriod">--:-- - --:--</div>
+                </div>
+            </div>
+            <div class="prayer-card">
+                <div class="prayer-name">মাগরিব</div>
+                <div class="prayer-time">
+                    <div class="main-time" id="maghribTime">--:--</div>
+                    <div class="period" id="maghribPeriod">--:-- - --:--</div>
+                </div>
+            </div>
+            <div class="prayer-card">
+                <div class="prayer-name">এশা</div>
+                <div class="prayer-time">
+                    <div class="main-time" id="ishaTime">--:--</div>
+                    <div class="period" id="ishaPeriod">--:-- - --:--</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>সর্বশেষ নামাজের সময়সূচি আপডেট হয়েছে : <span id="updateTime"></span></p>
+        </div>
+    </div>
+
+    <div class="floating-icon" id="floatingIcon">
+<i class="fa fa-eye-slash"></i>
+    </div>
         <section class="hero-section" style="background-image: url('https://i.postimg.cc/6QVsgy6g/1000048937.jpg'); background-size: cover;">
     <div class="quote-who" id="quoteWho"></div>
     <div class="quote-arabic" id="quoteArabic"></div>
@@ -1395,7 +1473,7 @@
             </section>
             <section class="hero-section">
               <p>Mehedi Al Hasan Sawon </p>
-                <small>Version : 0.000.2(Beta)</small>
+                <small>Version : 0.000.3(Beta)</small>
               <!---  <a href="#playlists" class="btn" onclick="showSection('courses-section')">আপনার যাত্রা শুরু করুন</a>--->
             </section>
         </section>
@@ -1498,7 +1576,7 @@
     </a>
     <a href="#" class="nav-item" onclick="showSection('qa-section')">
         <i class="fas fa-question-circle"></i>
-        <span>ইসলামিক Q&A</span>
+        <span> Q&A</span>
     </a>
     <a href="#" class="nav-item" onclick="showProgressSection()">
         <i class="fas fa-chart-line"></i>
@@ -1513,7 +1591,6 @@
             "></button>
         </div>
     </div>
-
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script>
@@ -2251,5 +2328,6 @@ function showSection(sectionId) {
             }
         }
     </script>
+        <script src="prayer.js"></script>
 </body>
 </html>
