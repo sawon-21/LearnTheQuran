@@ -6,6 +6,8 @@
     <meta name="theme-color" content="#0a1417">
     <meta name="description" content="কোরআন শরীফ পড়তে শিখুন - QuranicRoots">
     <title>QuranicRoots</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+Bengali:300,400,700&display=swap">
         <meta property="og:image" content="logo.png">
     <link rel="manifest" href="manifest.json">
@@ -1473,7 +1475,7 @@
             </section>
             <section class="hero-section">
               <p>Mehedi Al Hasan Sawon </p>
-                <small>Version : 0.000.3(Beta)</small>
+                <small>Version : 0.000.4(Beta) <br> New Feature <br> Community Social Conation <br> You Can Post,Like/Dislike,Comment,Share post</small>
               <!---  <a href="#playlists" class="btn" onclick="showSection('courses-section')">আপনার যাত্রা শুরু করুন</a>--->
             </section>
         </section>
@@ -1548,6 +1550,408 @@
 <section id="qa-section" class="app-section">
     <iframe id="qa-embed" src="https://www.iqa.info/" allowfullscreen></iframe>
 </section>
+
+<!-- Community Section -->
+<section id="community-section" class="app-section">
+    <div id="namePopup" class="popup d-none">
+        <div class="card p-4">
+            <h3 class="text-center mb-4" style="color: var(--accent);">Enter QuranicRoots</h3>
+            <input type="text" id="userNameInput" class="form-control mb-3" placeholder="Your Name" style="background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); color: var(--light);">
+            <button class="btn btn-primary w-100" onclick="joinCommunity()">Join</button>
+        </div>
+    </div>
+
+    <div id="community" class="container mt-4">
+        <div class="header">
+            <h1 class="text-center m-0" style="color: var(--light);">Community QuranicRoots</h1>
+        </div>
+        <div class="post-form card p-4 mb-4">
+            <textarea id="postInput" class="form-control mb-3" placeholder="Share your thoughts..." rows="4" maxlength="500"></textarea>
+            <button class="btn btn-primary" onclick="submitPost()">Publish</button>
+        </div>
+        <div id="postsContainer"></div>
+    </div>
+
+</section>
+    <style>
+
+        .container {
+            max-width: 1200px;
+            padding: 5px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(8px);
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .post-form textarea {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: var(--light);
+            padding: 15px;
+            resize: vertical;
+        }
+
+        .btn-primary {
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            color: var(--light);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.03);
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
+        }
+
+        .btn-action {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--light);
+            padding: 6px 12px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-action:hover {
+            background: rgba(0, 255, 204, 0.1);
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .active-like { color: #00ff00 !important; }
+        .active-dislike { color: #ff4444 !important; }
+        .timestamp { color: rgba(255, 255, 255, 0.6); font-size: 0.15rem; }
+        .comment-section { 
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .popup {
+            background: rgba(0, 0, 0, 0.95);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
+   .post p {
+        color: #ffffff;
+    }
+
+        .user-icon {
+            font-size: 1.5rem;
+            margin-right: 8px;
+            color: var(--accent);
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 1px; }
+            .card { padding: 1px; }
+            .header { padding: 15px; }
+            .post-form textarea { padding: 10px; }
+            .btn-primary { padding: 8px 15px; }
+            .btn-action { padding: 5px 10px; }
+            .d-flex.gap-4 { gap: 10px !important; flex-wrap: wrap; }
+        }
+
+        @media (max-width: 480px) {
+            .card { padding: 10px; }
+            h1 { font-size: 1.5rem; }
+            .post-form textarea { font-size: 0.9rem; }
+            .btn-action { font-size: 0.8rem; }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getDatabase, ref, set, push, onValue, update, get, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBzvajFC_47PW9Z0EHRZoT-hrmqnkL0KNI",
+            authDomain: "mehedi-catting.firebaseapp.com",
+            databaseURL: "https://mehedi-catting-default-rtdb.firebaseio.com",
+            projectId: "mehedi-catting",
+            storageBucket: "mehedi-catting.firebasestorage.app",
+            messagingSenderId: "3798147418",
+            appId: "1:3798147418:web:ea9a059c8db3c147319363",
+            measurementId: "G-CFGBXWVC3V"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        let userData = JSON.parse(localStorage.getItem("userData")) || {};
+        let userName = userData.name || null;
+        const icons = ['fa-user-astronaut', 'fa-user-ninja', 'fa-user-secret'];
+
+        initializeAppState();
+
+        function getRandomIcon() {
+            return icons[Math.floor(Math.random() * icons.length)];
+        }
+
+        function initializeAppState() {
+            if (!userName) {
+                document.getElementById("namePopup").classList.remove("d-none");
+                document.getElementById("community").classList.add("d-none");
+            } else {
+                document.getElementById("namePopup").classList.add("d-none");
+                document.getElementById("community").classList.remove("d-none");
+                fetchPosts();
+                checkURLForPost();
+            }
+        }
+
+        window.joinCommunity = async () => {
+            const nameInput = document.getElementById("userNameInput").value.trim();
+            if (!nameInput) {
+                showError("Please enter a name");
+                return;
+            }
+
+            userName = sanitizeInput(nameInput);
+            userData = {
+                name: userName,
+                joinedAt: Date.now()
+            };
+            localStorage.setItem("userData", JSON.stringify(userData));
+            
+            // Save to Firebase
+            await set(ref(db, `users/${userName}`), {
+                name: userName,
+                joinedAt: serverTimestamp()
+            });
+
+            document.getElementById("namePopup").classList.add("d-none");
+            document.getElementById("community").classList.remove("d-none");
+            fetchPosts();
+        };
+
+        window.submitPost = async () => {
+            const postContent = document.getElementById("postInput").value.trim();
+            if (!validateInput(postContent, 1, 500)) {
+                showError("Post must be 1-500 characters");
+                return;
+            }
+
+            const postsRef = ref(db, "posts");
+            const newPostRef = push(postsRef);
+            await set(newPostRef, {
+                content: sanitizeInput(postContent),
+                author: userName,
+                timestamp: serverTimestamp(),
+                likes: 0,
+                dislikes: 0,
+                reactions: {}
+            });
+            document.getElementById("postInput").value = "";
+        };
+
+        function fetchPosts() {
+            onValue(ref(db, "posts"), (snapshot) => {
+                const postsContainer = document.getElementById("postsContainer");
+                postsContainer.innerHTML = "";
+                const posts = snapshot.val();
+
+                if (posts) {
+                    Object.entries(posts).reverse().forEach(([postId, post]) => {
+                        renderPost(postId, post);
+                    });
+                } else {
+                    postsContainer.innerHTML = '<p class="text-center" style="color: rgba(255, 255, 255, 0.6);">No posts yet. Be the first!</p>';
+                }
+                checkURLForPost();
+            });
+        }
+
+        function renderPost(postId, post) {
+            const timestamp = post.timestamp ? new Date(post.timestamp).toLocaleString() : "Just now";
+            const userReaction = post.reactions?.[userName];
+            const postsContainer = document.getElementById("postsContainer");
+            const randomIcon = getRandomIcon();
+            const postElement = document.createElement("div");
+            postElement.id = `post-${postId}`;
+            postElement.className = "post card p-4";
+            postElement.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="d-flex align-items-center">
+                        <i class="fas ${randomIcon} user-icon"></i>
+                        <strong style="color: var(--accent);">${post.author || "Anonymous"}</strong>
+                    </div>
+                    <span class="timestamp">${timestamp}</span>
+                </div>
+                <p class="mb-4" style="font-size: 1.1rem; line-height: 1.6;">${post.content}</p>
+                <div class="d-flex gap-4">
+                    <button class="btn-action ${userReaction === 'like' ? 'active-like' : ''}" 
+                        onclick="reactToPost('${postId}', 'like', ${post.likes || 0}, ${post.dislikes || 0})">
+                        <i class="fas fa-thumbs-up"></i>
+                        <span class="reaction-count">${post.likes || 0}</span>
+                    </button>
+                    <button class="btn-action ${userReaction === 'dislike' ? 'active-dislike' : ''}" 
+                        onclick="reactToPost('${postId}', 'dislike', ${post.likes || 0}, ${post.dislikes || 0})">
+                        <i class="fas fa-thumbs-down"></i>
+                        <span class="reaction-count">${post.dislikes || 0}</span>
+                    </button>
+                    <button class="btn-action" onclick="toggleComments('${postId}')">
+                        <i class="fas fa-comment"></i> Comment
+                    </button>
+                    <button class="btn-action" onclick="sharePost('${postId}')">
+                        <i class="fas fa-share"></i> Share
+                    </button>
+                </div>
+                <div id="comments-${postId}" class="comment-section mt-3 d-none">
+                    <textarea class="form-control mb-3" placeholder="Your thoughts..." rows="2" maxlength="200" id="commentInput-${postId}" style="background: rgba(255, 255, 255, 0.03); border-color: rgba(255, 255, 255, 0.1); color: var(--light);"></textarea>
+                    <button class="btn btn-primary btn-sm" onclick="submitComment('${postId}')">Submit</button>
+                    <div id="commentList-${postId}" class="mt-3"></div>
+                </div>
+            `;
+            postsContainer.appendChild(postElement);
+            fetchComments(postId);
+        }
+
+        window.reactToPost = async (postId, reactionType, currentLikes, currentDislikes) => {
+            try {
+                const postRef = ref(db, `posts/${postId}`);
+                const snapshot = await get(postRef);
+                const post = snapshot.val();
+                const userReaction = post.reactions?.[userName];
+
+                if (userReaction === reactionType) return;
+
+                let updates = { reactions: post.reactions || {} };
+                let newLikes = currentLikes;
+                let newDislikes = currentDislikes;
+
+                if (userReaction) {
+                    if (userReaction === 'like' && newLikes > 0) newLikes--;
+                    if (userReaction === 'dislike' && newDislikes > 0) newDislikes--;
+                }
+
+                updates.reactions[userName] = reactionType;
+                if (reactionType === 'like') newLikes++;
+                if (reactionType === 'dislike') newDislikes++;
+
+                updates.likes = newLikes;
+                updates.dislikes = newDislikes;
+
+                await update(postRef, updates);
+            } catch (error) {
+                handleFirebaseError(error, "Failed to react to post");
+            }
+        };
+
+        window.toggleComments = (postId) => {
+            const commentSection = document.getElementById(`comments-${postId}`);
+            commentSection.classList.toggle("d-none");
+        };
+
+        window.submitComment = async (postId) => {
+            const commentInput = document.getElementById(`commentInput-${postId}`).value.trim();
+            if (!validateInput(commentInput, 1, 200)) {
+                showError("Comment must be 1-200 characters");
+                return;
+            }
+
+            await push(ref(db, `comments/${postId}`), {
+                content: sanitizeInput(commentInput),
+                author: userName,
+                timestamp: serverTimestamp()
+            });
+            document.getElementById(`commentInput-${postId}`).value = "";
+        };
+
+        function fetchComments(postId) {
+            onValue(ref(db, `comments/${postId}`), (snapshot) => {
+                const commentList = document.getElementById(`commentList-${postId}`);
+                commentList.innerHTML = "";
+                const comments = snapshot.val();
+
+                if (comments) {
+                    Object.values(comments).forEach(comment => {
+                        const timestamp = comment.timestamp ? new Date(comment.timestamp).toLocaleString() : "Just now";
+                        const randomIcon = getRandomIcon();
+                        commentList.innerHTML += `
+                            <div class="mb-3 d-flex">
+                                <i class="fas ${randomIcon} user-icon"></i>
+                                <div>
+                                    <strong style="color: var(--accent);">${comment.author || "Anonymous"}</strong>: ${comment.content}
+                                    <small class="timestamp d-block">${timestamp}</small>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+            });
+        }
+
+        window.sharePost = async (postId) => {
+            try {
+                const snapshot = await get(ref(db, `posts/${postId}`));
+                const post = snapshot.val();
+                const shareUrl = `${window.location.origin}${window.location.pathname}?post=${postId}`;
+                
+                if (navigator.share) {
+                    await navigator.share({
+                        title: "Community QuranicRoots Post",
+                        text: `${post.author}: ${post.content}`,
+                        url: shareUrl
+                    });
+                } else {
+                    navigator.clipboard.writeText(shareUrl);
+                    showError("Link copied to clipboard: " + shareUrl);
+                }
+            } catch (error) {
+                handleFirebaseError(error, "Failed to share post");
+            }
+        };
+
+        function checkURLForPost() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const postId = urlParams.get('post');
+            if (postId) {
+                const postElement = document.getElementById(`post-${postId}`);
+                if (postElement) {
+                    postElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    postElement.style.border = "2px solid var(--accent)";
+                    setTimeout(() => {
+                        postElement.style.border = "1px solid rgba(255, 255, 255, 0.1)";
+                    }, 3000);
+                }
+            }
+        }
+
+        function validateInput(input, min, max) {
+            return input && input.length >= min && input.length <= max;
+        }
+
+        function sanitizeInput(input) {
+            const div = document.createElement("div");
+            div.textContent = input;
+            return div.innerHTML;
+        }
+
+        function showError(message) {
+            alert(message);
+        }
+
+        function handleFirebaseError(error, context) {
+            console.error(`${context}:`, error);
+            showError(`${context}: ${error.message}`);
+        }
+    </script>
+
         <!-- Progress Section -->
         <section id="progress-section" class="app-section">
             <div class="hero-section">
@@ -1578,6 +1982,10 @@
         <i class="fas fa-question-circle"></i>
         <span> Q&A</span>
     </a>
+    <a href="#" class="nav-item" onclick="showSection('community-section')">
+            <i class="fas fa-users"></i>
+            <span>কমিউনিটি</span>
+        </a>
     <a href="#" class="nav-item" onclick="showProgressSection()">
         <i class="fas fa-chart-line"></i>
         <span>প্রোগ্রেস</span>
